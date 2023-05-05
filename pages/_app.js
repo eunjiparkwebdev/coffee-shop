@@ -1,5 +1,15 @@
-import '@/styles/globals.css'
+import "@/styles/globals.css";
+// import Font Awesome CSS
+import "@fortawesome/fontawesome-svg-core/styles.css";
 
-export default function App({ Component, pageProps }) {
-  return <Component {...pageProps} />
+import { config } from "@fortawesome/fontawesome-svg-core";
+import StoreProvider from "@/store/store-context";
+config.autoAddCss = false;
+
+export default function myApp({ Component, pageProps }) {
+  return (
+    <StoreProvider>
+      <Component {...pageProps} />
+    </StoreProvider>
+  );
 }
