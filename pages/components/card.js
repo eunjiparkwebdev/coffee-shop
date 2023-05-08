@@ -10,15 +10,15 @@ const Card = (props) => {
       <div className={cls("glass", styles.container)}>
         <div className={styles.cardHeaderWrapper}>
           <h2 className={styles.cardName}>{props.name}</h2>
-          <div className={styles.cardImageWrapper}>
-            <Image
-              src={props.imgUrl}
-              width={260}
-              height={160}
-              alt={props.alt}
-              className={styles.cardImage}
-            />
-          </div>
+        </div>
+        <div className={styles.cardImageWrapper}>
+          <Image
+            src={props.imgUrl}
+            width={260}
+            height={160}
+            alt={props.alt}
+            className={styles.cardImage}
+          />
         </div>
       </div>
     </Link>
