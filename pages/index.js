@@ -24,8 +24,6 @@ export async function getStaticProps(context) {
 
 //below props is referring to props inside of props above
 export default function Home(props) {
-  console.log("props?=", props);
-
   const { handleTrackLocation, locationErrorMsg, isFindingLocation } =
     useTrackLocation();
 
@@ -33,8 +31,6 @@ export default function Home(props) {
   const [coffeeStoresError, setCoffeeStoresError] = useState(null);
   const { dispatch, state } = useContext(StoreContext);
   const { coffeeStores, latitude, longitude } = state;
-
-  console.log({ latitude, longitude, locationErrorMsg });
 
   //we want to fetch new coffee stores only if there is a lat Long data from the user
 
@@ -46,7 +42,6 @@ export default function Home(props) {
             `api/getCoffeeStoresByLocation?/latitude=${latitude}&longitude=${longitude}&limit=30`
           );
           const coffeeStores = await response.json();
-          console.log("fetched coffee stores", { response });
           dispatch({
             type: ACTION_TYPES.SET_COFFEE_STORES,
             payload: { coffeeStores },
@@ -61,12 +56,10 @@ export default function Home(props) {
       }
     }
     setCoffeeStoresByLocation();
-  }, [latitude, longitude]);
+  }, [dispatch, latitude, longitude]);
 
   const handleOnBannerButtonClick = () => {
-    console.log("hi banner button");
     handleTrackLocation();
-    console.log(isFindingLocation);
   };
 
   return (
