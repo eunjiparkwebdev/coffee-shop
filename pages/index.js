@@ -1,10 +1,10 @@
 import Head from "next/head";
 import Image from "next/image";
 import styles from "../styles/Home.module.css";
-import Banner from "./components/banner";
-import Card from "./components/card";
+import Banner from "@/components/banner";
+import Card from "@/components/card";
 import { fetchCoffeeStores } from "@/lib/coffee-store";
-import useTrackLocation from "./hooks/use-track-location";
+import useTrackLocation from "../hooks/use-track-location";
 import { useEffect, useState, useContext } from "react";
 import { ACTION_TYPES, StoreContext } from "../store/store-context";
 
@@ -13,6 +13,20 @@ import { ACTION_TYPES, StoreContext } from "../store/store-context";
 //see the code or have an access to the code. They wont be able to inspect elements
 
 export async function getStaticProps(context) {
+  if (
+    !process.env.NEXT_PUBLIC_YELP_API_KEY &&
+    !process.env.AIRTABLE_API_KEY &&
+    !process.env.AIRTABLE_TABLENAME &&
+    !process.env.NEXT_PUBLIC_UNSPLASH_ACCESS_KEY
+  ) {
+    return {
+      redirect: {
+        destination: "/problem",
+        permanent: false,
+      },
+    };
+  }
+
   const coffeeStores = await fetchCoffeeStores();
 
   return {

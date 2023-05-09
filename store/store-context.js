@@ -25,7 +25,7 @@ const storeReducer = (state, action) => {
   }
 };
 
-export const StoreProvider = ({ children }) => {
+const StoreProvider = ({ children }) => {
   const initialState = {
     latitude: "",
     longitude: "",
