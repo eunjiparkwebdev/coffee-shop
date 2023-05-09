@@ -100,8 +100,9 @@ export default function Home(props) {
             priority
             src="/static/hero-image.png"
             alt="hero-image"
-            width={700}
-            height={400}
+            width={800}
+            height={500}
+            layout="responsive"
           />{" "}
         </div>
 
