@@ -5,7 +5,7 @@ import Head from "next/head";
 import styles from "../../styles/coffee-store.module.css";
 import Image from "next/image";
 import cls from "classnames";
-import { fetchCoffeeStores } from "@/lib/coffee-store";
+import { FetchCoffeeStores } from "@/lib/coffee-store";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { StoreContext } from "@/store/store-context";
@@ -16,7 +16,7 @@ import useSWR from "swr";
 export async function getStaticProps(staticProps) {
   //these console.log will only run in the command line on serverside.
   const params = staticProps.params;
-  const coffeeStores = await fetchCoffeeStores();
+  const coffeeStores = await FetchCoffeeStores();
   const findCoffeeStoreById = coffeeStores.find((coffeeStore) => {
     return coffeeStore.id.toString() === params.id; //dynamic id
   });
@@ -29,7 +29,7 @@ export async function getStaticProps(staticProps) {
 }
 
 export async function getStaticPaths() {
-  const coffeeStores = await fetchCoffeeStores();
+  const coffeeStores = await FetchCoffeeStores();
 
   const paths = coffeeStores.map((coffeeStore) => {
     return {

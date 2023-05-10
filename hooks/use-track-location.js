@@ -8,6 +8,7 @@ const useTrackLocation = () => {
   // const [longitude, setLongitude] = useState("");
   const [isFindingLocation, setIsFindingLocation] = useState(false);
   const { dispatch } = useContext(StoreContext);
+
   const success = (position) => {
     console.log("success");
     const latitude = position.coords.latitude;
@@ -43,9 +44,8 @@ const useTrackLocation = () => {
       navigator.geolocation.getCurrentPosition(success, error);
     }
   };
+
   return {
-    // latitude,
-    // longitude,
     handleTrackLocation,
     locationErrorMsg,
     isFindingLocation,

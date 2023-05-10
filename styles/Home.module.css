@@ -7,7 +7,7 @@
   margin-bottom: 14rem /* 224px */;
 }
 .main {
-  margin-top: 2.5rem /* 40px */;
+  margin-top: 6rem /* 40px */;
   margin-left: auto;
   margin-right: auto;
   max-width: 72rem /* 1152px */;
@@ -16,9 +16,10 @@
 }
 .heroImage {
   position: absolute;
-  right: 50px;
+  right: 0px;
   top: 150px;
-  z-index: 1;
+  z-index:1;
+  opacity: 0.4;
 }
 
 
@@ -27,6 +28,7 @@
   grid-template-columns: repeat(1, minmax(0, 1fr));
   column-gap: 1.5rem /* 24px */;
   row-gap: 1.5rem /* 24px */;
+ 
 }
 
 .card {
@@ -43,6 +45,8 @@
 
 .sectionWrapper {
   margin-top: 6rem;
+  position: relative;
+  z-index:2;
 
 }
 
@@ -59,9 +63,13 @@
     padding-left: 1rem /* 16px */;
     padding-right: 1rem /* 16px */;
   }
+  
+  .heroImage{
+   opacity: 0.6;
 
+  }
   .main {
-    margin-top: 3rem /* 48px */;
+    margin-top: 5rem /* 48px */;
     padding-left: 1.5rem /* 24px */;
     padding-right: 1.5rem /* 24px */;
   }
@@ -84,12 +92,12 @@
   }
 
   .main {
-    margin-top: 4rem /* 64px */;
+    margin-top: 8rem /* 64px */;
   }
 
   .heroImage {
-    right: 20%;
-
+    right: 2%;
+    opacity: 0.8;
   }
 
 
@@ -105,13 +113,21 @@
     padding-right: 2.5rem /* 40px */;
   }
   .main {
-    margin-top: 5rem /* 80px */;
+    margin-top: 8rem /* 80px */;
     padding-left: 2rem /* 32px */;
     padding-right: 2rem /* 32px */;
   }
   .heroImage {
-    top: 5%;
-    right: 20%;
+    top: 22%;
+    right: 12%;
+    opacity: 1;
+  }
+
+  .buttonCover {
+    padding-top: 2%;
+    padding-left:0;
+    padding-right: 13%;
+  
   }
 
   .cardLayout {
@@ -124,13 +140,144 @@
 @media (min-width: 1280px) {
   
   .main {
-    margin-top: 7rem /* 112px */;
+    margin-top: 9rem /* 112px */;
    
   }
+  
+ .heroImage {
+  right: 20%;
+ }
   
 
   .cardLayout {
     grid-template-columns: repeat(3, minmax(0, 1fr));
  
   }
+}
+
+
+
+
+
+/* Button 6 */
+.button6{
+  overflow: visible;
+}
+
+.button6 .knobs:before {
+  content: "CA";
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  width: 20px;
+  height: 10px;
+  color: #fff;
+  font-size: 10px;
+  font-weight: bold;
+  text-align: center;
+  line-height: 1;
+  padding: 9px 4px;
+  background-color: #f44336;
+  border-radius: 50%;
+}
+
+.button6 .layer,
+.button6 .knobs,
+.button6 .knobs:before {
+  transform: rotateZ(0);
+  transition: 0.4s cubic-bezier(0.18, 0.89, 0.35, 1.15) all;
+}
+
+.button6 .checkbox:checked + .knobs {
+  transform: rotateZ(-180deg);
+}
+
+.button6 .checkbox:checked + .knobs:before {
+  content: "US";
+  background-color: #012356;
+  transform: rotateZ(180deg);
+}
+
+.button6 .checkbox:checked ~ .layer {
+  background-color: #f5f9fc;
+  transform: rotateZ(180deg);
+}
+
+
+
+.toggleButtonCover {
+  display: table-cell;
+  position: relative;
+  width: 200px;
+  height: 140px;
+  box-sizing: border-box;
+}
+
+.buttonCover {
+  height: 100px;
+  margin: 50px 10%;
+  padding-left: 60%;
+
+}
+
+.buttonCover:before {
+  /* counter-increment: button-counter;
+  content: counter(button-counter); */
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  color: #d7e3e3;
+  font-size: 12px;
+  line-height: 1;
+  padding: 5px;
+}
+
+.buttonCover,
+.knobs,
+.layer {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+.button {
+  position: relative;
+  top: 50%;
+  width: 74px;
+  height: 36px;
+  margin: -20px auto 0 auto;
+  overflow: hidden;
+}
+
+.button.r,
+.button.r .layer {
+  border-radius: 100px;
+}
+
+.button.b2 {
+  border-radius: 2px;
+}
+
+.checkbox {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+  z-index: 3;
+}
+
+.knobs {
+  z-index: 2;
+}
+
+.layer {
+  width: 100%;
+  background-color: #fcebeb;
+  transition: 0.3s ease all;
+  z-index: 1;
 }

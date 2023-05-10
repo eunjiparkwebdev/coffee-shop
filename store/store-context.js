@@ -6,6 +6,7 @@ export const ACTION_TYPES = {
   SET_LATITUDE: "SET_LETITUDE",
   SET_LONGITUDE: "SET_LONGITUDE",
   SET_COFFEE_STORES: "SET_COFFEE_STORES",
+  SET_COUNTRY: "SET_COUNTRY",
 };
 
 const storeReducer = (state, action) => {
@@ -20,6 +21,10 @@ const storeReducer = (state, action) => {
       return { ...state, coffeeStores: action.payload.coffeeStores };
     }
 
+    case ACTION_TYPES.SET_COUNTRY: {
+      return { ...state, country: action.payload };
+    }
+
     default:
       throw new Error(`Unhandled action type: ${action.type}`);
   }
@@ -30,6 +35,7 @@ const StoreProvider = ({ children }) => {
     latitude: "",
     longitude: "",
     coffeeStores: [],
+    country: false,
   };
 
   const [state, dispatch] = useReducer(storeReducer, initialState);

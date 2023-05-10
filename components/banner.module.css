@@ -20,7 +20,7 @@
 
 .title2 {
   display: block;
-  color: var(--text-purple);
+  color: var(--text-orange);
 }
 
 .subTitle {
@@ -35,11 +35,10 @@
   margin-top: 1.25rem;
 }
 
-.button {
- 
+.buttonClick{
+ border-radius: 5px;
   font-family: IBMPlexSans;
-  
-  background-color: var(--text-purple-dark);
+  background-color: var(--text-orange-dark);
   cursor: pointer;
   color: white;
   outline: 0;
@@ -53,8 +52,8 @@
   padding-right: 2.5rem /* 40px */;
 }
 
-.button:hover {
-  background-color: var(--text-purple-dark);
+.buttonClick:hover {
+  background-color: var(--text-orange);
 }
 
 /** 
@@ -137,3 +136,5 @@
     display: inline;
   }
 }
+
+

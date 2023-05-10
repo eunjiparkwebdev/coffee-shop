@@ -37,6 +37,7 @@
   
   .cardImageWrapper {
     color: var(--text-white-100);
+    text-align: center;
   }
   
   .cardImage {
