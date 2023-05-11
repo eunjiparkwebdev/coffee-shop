@@ -2,13 +2,13 @@ import { useRouter } from "next/router";
 import { useState, useEffect, useContext } from "react";
 import Link from "next/link";
 import Head from "next/head";
-import styles from "../../styles/coffee-store.module.css";
+import styles from "../../styles/sushi-store.module.css";
 import Image from "next/image";
 import cls from "classnames";
-import { FetchCoffeeStores } from "@/lib/coffee-store";
+import { FetchSushiStores } from "@/lib/sushi-store";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
-import { StoreContext } from "@/store/store-context";
+import { StoreContext, ACTION_TYPES } from "@/store/store-context";
 import { isEmpty, fetcher } from "@/utils";
 import useSWR from "swr";
 
@@ -16,25 +16,25 @@ import useSWR from "swr";
 export async function getStaticProps(staticProps) {
   //these console.log will only run in the command line on serverside.
   const params = staticProps.params;
-  const coffeeStores = await FetchCoffeeStores();
-  const findCoffeeStoreById = coffeeStores.find((coffeeStore) => {
-    return coffeeStore.id.toString() === params.id; //dynamic id
+  const sushiStores = await FetchSushiStores();
+  const findSushiStoreById = sushiStores.find((sushiStore) => {
+    return sushiStore.id.toString() === params.id; //dynamic id
   });
 
   return {
     props: {
-      coffeeStore: findCoffeeStoreById ? findCoffeeStoreById : {},
+      sushiStore: findSushiStoreById ? findSushiStoreById : {},
     },
   };
 }
 
 export async function getStaticPaths() {
-  const coffeeStores = await FetchCoffeeStores();
+  const sushiStores = await FetchSushiStores();
 
-  const paths = coffeeStores.map((coffeeStore) => {
+  const paths = sushiStores.map((sushiStore) => {
     return {
       params: {
-        id: coffeeStore.id.toString(),
+        id: sushiStore.id.toString(),
       },
     };
   });
@@ -53,55 +53,70 @@ export async function getStaticPaths() {
 }
 
 //below props is whatever that was clicked in index.js(home page)
-const CoffeeStore = (initialProps) => {
+const SushiStore = (initialProps) => {
   const router = useRouter();
 
   const id = router.query.id;
-  const [coffeeStore, setCoffeeStore] = useState(
-    initialProps.coffeeStore || {}
-  );
+  const [sushiStore, setSushiStore] = useState(initialProps.sushiStore || {});
 
   const [votingCount, setVotingCount] = useState(0);
-  const { data, error } = useSWR(`/api/getCoffeeStoreById?id=${id}`, fetcher, {
+  const { data, error } = useSWR(`/api/getSushiStoreById?id=${id}`, fetcher, {
     refreshInterval: 1000,
   });
 
   const {
-    state: { coffeeStores },
+    state: { sushiStores },
   } = useContext(StoreContext);
 
+  const { dispatch } = useContext(StoreContext);
+
   useEffect(() => {
-    if (isEmpty(initialProps.coffeeStore)) {
-      if (coffeeStores.length > 0) {
-        const findCoffeeStoreById = coffeeStores.find((coffeeStore) => {
-          return coffeeStore.id.toString() === id; //dynamic id
+    dispatch({
+      type: ACTION_TYPES.SET_COUNTRY,
+      payload: false,
+    });
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (isEmpty(initialProps.sushiStore)) {
+      if (sushiStores.length > 0) {
+        const findSushiStoreById = sushiStores.find((sushiStore) => {
+          return sushiStore.id.toString() === id; //dynamic id
         });
-        setCoffeeStore(findCoffeeStoreById);
-        handleCreateCoffeeStore(findCoffeeStoreById);
+        setSushiStore(findSushiStoreById);
+        handleCreateSushiStore(findSushiStoreById);
       }
     } else {
       // SSG
-      handleCreateCoffeeStore(initialProps.coffeeStore);
+      handleCreateSushiStore(initialProps.sushiStore);
     }
-  }, [id, initialProps.coffeeStore, coffeeStores]);
+  }, [id, initialProps.sushiStore, sushiStores]);
 
   useEffect(() => {
     if (data && data.length > 0) {
-      setCoffeeStore(data[0]);
+      setSushiStore(data[0]);
       setVotingCount(data[0].voting);
     }
   }, [data]);
 
   if (error) {
-    return <div>Something went wrong retrieving coffee store page</div>;
+    return <div>Something went wrong retrieving sushi store page</div>;
   }
 
-  const handleCreateCoffeeStore = async (coffeeStore) => {
+  const handleCreateSushiStore = async (sushiStore) => {
     try {
-      const { id, name, address, city, zip_code, voting, img_url } =
-        coffeeStore;
+      const {
+        id,
+        name,
+        address,
+        city,
+        zip_code,
+        voting,
+        img_url,
+        unsplashUrl,
+      } = sushiStore;
       //this fetch is get method
-      const response = await fetch("/api/createCoffeeStore", {
+      const response = await fetch("/api/createSushiStore", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -114,13 +129,13 @@ const CoffeeStore = (initialProps) => {
           city: city || "",
           zip_code: zip_code || "",
           voting: 0,
-          img_url,
+          img_url: img_url ? img_url : unsplashUrl,
         }),
       });
 
-      const dbCoffeeStore = response.json();
+      const dbSushiStore = response.json();
     } catch (err) {
-      console.error("error creating coffee store", err);
+      console.error("error creating sushi store", err);
     }
   };
 
@@ -131,7 +146,7 @@ const CoffeeStore = (initialProps) => {
     zip_code = "",
     img_url = "",
     unsplashUrl = "",
-  } = coffeeStore;
+  } = sushiStore;
 
   if (router.isFallback) {
     return <div>Loading...</div>;
@@ -140,7 +155,7 @@ const CoffeeStore = (initialProps) => {
   const handleUpVoteButton = async () => {
     try {
       //this fetch is get method
-      const response = await fetch("/api/favouriteCoffeeStoreById", {
+      const response = await fetch("/api/favouriteSushiStoreById", {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -150,18 +165,18 @@ const CoffeeStore = (initialProps) => {
         }),
       });
 
-      const dbCoffeeStore = response.json();
-      if (dbCoffeeStore && dbCoffeeStore.length > 0) {
+      const dbSushiStore = response.json();
+      if (dbSushiStore && dbSushiStore.length > 0) {
         let count = votingCount + 1;
         setVotingCount(count);
       }
     } catch (err) {
-      console.error("error upvoting coffee store", err);
+      console.error("error upvoting sushi store", err);
     }
   };
 
   if (error) {
-    return <div>Something went wrong retrieving coffee store page.</div>;
+    return <div>Something went wrong retrieving sushi store page.</div>;
   }
 
   return (
@@ -235,4 +250,4 @@ const CoffeeStore = (initialProps) => {
   );
 };
 
-export default CoffeeStore;
+export default SushiStore;

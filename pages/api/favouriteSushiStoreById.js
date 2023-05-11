@@ -4,7 +4,7 @@ import {
   getMinifiedRecords,
 } from "../../lib/airtable";
 
-const favouriteCoffeeStoreById = async (req, res) => {
+const favouriteSushiStoreById = async (req, res) => {
   if (req.method === "PUT") {
     try {
       const { id } = req.body;
@@ -31,7 +31,7 @@ const favouriteCoffeeStoreById = async (req, res) => {
             res.json(minifiedRecords);
           }
         } else {
-          res.json({ message: "Coffee store id doesn't exist", id });
+          res.json({ message: "Sushi store id doesn't exist", id });
         }
       } else {
         res.status(400);
@@ -39,9 +39,9 @@ const favouriteCoffeeStoreById = async (req, res) => {
       }
     } catch (error) {
       res.status(500);
-      res.json({ message: "Error upvoting coffee store", error });
+      res.json({ message: "Error upvoting sushi store", error });
     }
   }
 };
 
-export default favouriteCoffeeStoreById;
+export default favouriteSushiStoreById;

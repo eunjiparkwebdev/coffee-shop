@@ -3,7 +3,7 @@ import Image from "next/image";
 import styles from "../styles/Home.module.css";
 import Banner from "@/components/banner";
 import Card from "@/components/card";
-import { FetchCoffeeStores } from "@/lib/coffee-store";
+import { FetchSushiStores } from "@/lib/sushi-store";
 import useTrackLocation from "../hooks/use-track-location";
 import { useEffect, useState, useContext } from "react";
 import { ACTION_TYPES, StoreContext } from "../store/store-context";
@@ -27,11 +27,11 @@ export async function getStaticProps(context) {
     };
   }
 
-  const coffeeStores = await FetchCoffeeStores();
+  const sushiStores = await FetchSushiStores();
 
   return {
     props: {
-      coffeeStores: coffeeStores,
+      sushiStores: sushiStores,
     }, //will be passed to the page component as props
   };
 }
@@ -41,33 +41,33 @@ export default function Home(props) {
   const { handleTrackLocation, locationErrorMsg, isFindingLocation } =
     useTrackLocation();
 
-  // const [coffeeStores, setCoffeeStores] = useState("");
-  const [coffeeStoresError, setCoffeeStoresError] = useState(null);
+  const [sushiStoresError, setSushiStoresError] = useState(null);
   const { dispatch, state } = useContext(StoreContext);
-  const { coffeeStores, latitude, longitude, country } = state;
+  const { sushiStores, latitude, longitude, countryCode } = state;
+  const [currentCountry, setCurrentCountry] = useState("CA");
 
   useEffect(() => {
-    async function setCoffeeStoresByLocation() {
+    async function setSushiStoresByLocation() {
       if (latitude && longitude) {
         try {
           const response = await fetch(
-            `api/getCoffeeStoreByLocation/?latitude=${latitude}&longitude=${longitude}&limit=35`
+            `api/getSushiStoreByLocation/?latitude=${latitude}&longitude=${longitude}&limit=35`
           );
-          const coffeeStores = await response.json();
+          const sushiStores = await response.json();
           dispatch({
-            type: ACTION_TYPES.SET_COFFEE_STORES,
-            payload: { coffeeStores },
+            type: ACTION_TYPES.SET_SUSHI_STORES,
+            payload: { sushiStores },
           });
-          // setCoffeeStores(fetchedCoffeeStores);
-          //set coffee stores
+          // setsushiStores(fetchedsushiStores);
+          //set sushi stores
         } catch (error) {
           //set error
           console.log({ error });
-          setCoffeeStoresError(error.message);
+          setSushiStoresError(error.message);
         }
       }
     }
-    setCoffeeStoresByLocation();
+    setSushiStoresByLocation();
   }, [dispatch, latitude, longitude]);
 
   const handleOnBannerButtonClick = () => {
@@ -77,9 +77,17 @@ export default function Home(props) {
   const handleCheckbox = () => {
     dispatch({
       type: ACTION_TYPES.SET_COUNTRY,
-      payload: !country,
+      payload: !countryCode,
     });
+    if (!countryCode) {
+      setCurrentCountry("US");
+    } else {
+      setCurrentCountry("CA");
+    }
   };
+
+  console.log(countryCode);
+  console.log(currentCountry);
 
   return (
     <div className={styles.container}>
@@ -100,7 +108,7 @@ export default function Home(props) {
               type="checkbox"
               className={styles.checkbox}
               onChange={handleCheckbox}
-              value={country}
+              value={countryCode}
             />
             <div className={styles.knobs}></div>
             <div className={styles.layer}></div>
@@ -111,7 +119,7 @@ export default function Home(props) {
           handleClick={handleOnBannerButtonClick}
         />
         {locationErrorMsg && <p>Something went wrong: {locationErrorMsg} </p>}
-        {coffeeStoresError && <p>Something went wrong: {coffeeStoresError}</p>}
+        {sushiStoresError && <p>Something went wrong: {sushiStoresError}</p>}
         <div className={styles.heroImage}>
           <Image
             priority
@@ -122,43 +130,47 @@ export default function Home(props) {
           />{" "}
         </div>
 
-        {coffeeStores.length > 0 && (
+        {sushiStores.length > 0 && (
           <div className={styles.sectionWrapper}>
             <h2 className={styles.heading2}>Restaurants near me</h2>
             <div className={styles.cardLayout}>
-              {coffeeStores.map((coffeeStore) => {
-                return (
-                  <Card
-                    key={coffeeStore.id}
-                    name={coffeeStore.name}
-                    imgUrl={coffeeStore.img_url || coffeeStore.unsplashUrl}
-                    href={`/coffee-store/${coffeeStore.id}`}
-                    className={styles.card}
-                    alt={`picture of ${coffeeStore.name} store`}
-                  />
-                );
-              })}
+              {sushiStores
+                .filter((sushiStore) => sushiStore.country === currentCountry)
+                .map((sushiStore) => {
+                  return (
+                    <Card
+                      key={sushiStore.id}
+                      name={sushiStore.name}
+                      imgUrl={sushiStore.img_url || sushiStore.unsplashUrl}
+                      href={`/sushi-store/${sushiStore.id}`}
+                      className={styles.card}
+                      alt={`picture of ${sushiStore.name} store`}
+                    />
+                  );
+                })}
             </div>
           </div>
         )}
 
         <div className={styles.sectionWrapper}>
-          {props.coffeeStores.length > 0 && (
+          {props.sushiStores.length > 0 && (
             <>
-              <h2 className={styles.heading2}>Windsor stores</h2>
+              <h2 className={styles.heading2}>Near Windsor</h2>
               <div className={styles.cardLayout}>
-                {props.coffeeStores.map((coffeeStore) => {
-                  return (
-                    <Card
-                      key={coffeeStore.id}
-                      name={coffeeStore.name}
-                      imgUrl={coffeeStore.img_url}
-                      href={`/coffee-store/${coffeeStore.id}`}
-                      className={styles.card}
-                      alt={`picture of ${coffeeStore.name} store`}
-                    />
-                  );
-                })}
+                {props.sushiStores
+                  .filter((sushiStore) => sushiStore.country === currentCountry)
+                  .map((sushiStore) => {
+                    return (
+                      <Card
+                        key={sushiStore.id}
+                        name={sushiStore.name}
+                        imgUrl={sushiStore.img_url}
+                        href={`/sushi-store/${sushiStore.id}`}
+                        className={styles.card}
+                        alt={`picture of ${sushiStore.name} store`}
+                      />
+                    );
+                  })}
               </div>
             </>
           )}

@@ -5,7 +5,7 @@ export const StoreContext = createContext();
 export const ACTION_TYPES = {
   SET_LATITUDE: "SET_LETITUDE",
   SET_LONGITUDE: "SET_LONGITUDE",
-  SET_COFFEE_STORES: "SET_COFFEE_STORES",
+  SET_SUSHI_STORES: "SET_SUSHI_STORES",
   SET_COUNTRY: "SET_COUNTRY",
 };
 
@@ -17,12 +17,12 @@ const storeReducer = (state, action) => {
     case ACTION_TYPES.SET_LONGITUDE: {
       return { ...state, longitude: action.payload.longitude };
     }
-    case ACTION_TYPES.SET_COFFEE_STORES: {
-      return { ...state, coffeeStores: action.payload.coffeeStores };
+    case ACTION_TYPES.SET_SUSHI_STORES: {
+      return { ...state, sushiStores: action.payload.sushiStores };
     }
 
     case ACTION_TYPES.SET_COUNTRY: {
-      return { ...state, country: action.payload };
+      return { ...state, countryCode: action.payload };
     }
 
     default:
@@ -34,8 +34,8 @@ const StoreProvider = ({ children }) => {
   const initialState = {
     latitude: "",
     longitude: "",
-    coffeeStores: [],
-    country: false,
+    sushiStores: [],
+    countryCode: false,
   };
 
   const [state, dispatch] = useReducer(storeReducer, initialState);

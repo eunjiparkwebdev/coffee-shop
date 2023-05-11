@@ -1,6 +1,7 @@
 import { table, getMinifiedRecords, findRecordByFilter } from "@/lib/airtable";
 
-const createCoffeeStore = async (req, res) => {
+const createSushiStore = async (req, res) => {
+  console.log(req.body);
   if (req.method === "POST") {
     const { id, name, address, city, zip_code, img_url, voting } = req.body;
 
@@ -45,4 +46,4 @@ const createCoffeeStore = async (req, res) => {
   }
 };
 
-export default createCoffeeStore;
+export default createSushiStore;
